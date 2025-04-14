@@ -1,0 +1,21 @@
+.signup-bg{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    gap: 20px;
+    .logo-login{
+    padding-top: 20px;
+   }
+}
+
+.signup-box{
+    /* border-top:2px solid red ; */
+    border-left: 2px solid var(--common-yellow);
+    border-bottom: 2px solid var(--common-blue);
+    padding: 30px;
+    border-radius: 20px;
+    min-width: 600px;
+    background-color: transparent;
+    box-shadow: 0 3px 30px rgba(0, 0, 0, 0.1);
+}

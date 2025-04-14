@@ -1,0 +1,43 @@
+.bank-detail-container {
+  margin: auto;
+  max-width: 1150px;
+  margin-top: 40px;
+
+  .bank-right {
+    border: 1px solid #c9c9c9a7;
+    /* padding: 15px; */
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    /* gap: 20px; */
+    .bank-name {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom: 1px solid #c9c9c999;
+      padding: 20px;
+      background-color: #f5f5f5bb;
+    }
+  }
+}
+
+.add-bank-card {
+  padding: 20px;
+  max-height: 350px;
+}
+.loader-bank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+}
+
+.spinner-bank {
+  border: 6px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 6px solid #3498db;
+  width: 50px;
+  height: 50px;
+  margin-top: 60px;
+  animation: spin 1s linear infinite;
+}
