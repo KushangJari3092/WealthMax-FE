@@ -44,11 +44,12 @@ export const login = (payload) => async (dispatch) => {
       payload,
       { withCredentials: true }
     );
-    // console.log("response", response);
+    console.log("response", response);
     if (response?.data?.loggedin) {
       dispatch(loginSuccess(response?.data));
     }
-
+    Cookies.set("token", response?.data?.token)
+    Cookies.set("user", response?.data?.user)
     return { success: true, data: response.data };
   } catch (error) {
     // console.log('error', error)
