@@ -69,7 +69,7 @@ export default function Dashboard() {
       <Grid container spacing={3}>
         {Object.keys(priceData).map((symbol) => {
           const stock = priceData[symbol];
-          console.log("stock",stock);
+          // console.log("stock",stock);
           
           const isPositive = stock?.currentPrice - stock?.prevDayClose >= 0;
 

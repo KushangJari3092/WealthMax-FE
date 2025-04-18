@@ -17,15 +17,15 @@ import CapitalDetails from "../components/capital";
 import OrderHistory from "../components/orderHistory";
 import MyPortfolio from "../components/portfolio";
 import Reports from "../components/reports";
+import { useSelector } from "react-redux";
 export default function Routes() {
+  const token = useSelector((state) => state.auth?.token);
   const ProtectedRoute = ({ children }) => {
-    const token = Cookies.get("token");
     console.log("token",token);
     
     return token ? children : <Navigate to="/login" replace />;
   };
   const PublicRoute = ({ children }) => {
-    const token = Cookies.get("token");
     return token ? <Navigate to="/" replace /> : children;
   };
   return (

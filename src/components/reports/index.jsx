@@ -30,7 +30,7 @@ const Reports = () => {
   const [fromDate, setFromDate] = useState(""); // Default from date
   const [toDate, setToDate] = useState(""); // Default to date
   const [show, setShow] = useState(false);
-  console.log("orders",orders);
+  // console.log("orders",orders);
   
 
   const handleGenerateReport = async () => {

@@ -17,7 +17,8 @@ try {
 // console.log("persistedUser", persistedUser);
 
 const initialState = {
-  user: persistedUser,
+  user: null,
+  token:'',
 };
 
 const authSlice = createSlice({
@@ -26,13 +27,16 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess: (state, action) => {
       state.user = action.payload.user;
-      // Optionally, you could store the user in the cookie after a successful login:
-      // Cookies.set("user", JSON.stringify(action.payload.user), { expires: 7 }); // Set for 7 days, for example
+    },
+    setToken: (state, action) => {
+      console.log("action",action);
+      
+      state.token = action.payload;
     },
   },
 });
 
-export const { loginSuccess } = authSlice.actions;
+export const { loginSuccess,setToken } = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -44,12 +48,12 @@ export const login = (payload) => async (dispatch) => {
       payload,
       { withCredentials: true }
     );
-    console.log("response", response);
     if (response?.data?.loggedin) {
       dispatch(loginSuccess(response?.data));
+      dispatch(setToken(response?.data?.token))
     }
-    Cookies.set("token", response?.data?.token)
-    Cookies.set("user", response?.data?.user)
+    // Cookies.set("token", response?.data?.token)
+    // Cookies.set("user", response?.data?.user)
     return { success: true, data: response.data };
   } catch (error) {
     // console.log('error', error)

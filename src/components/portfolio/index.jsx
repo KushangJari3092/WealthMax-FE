@@ -21,7 +21,7 @@ const MyPortfolio = () => {
     const [pricesData, setPricesData] = useState({});
     const [symbols, setSymbols] = useState([]);
     const loading = useSelector((state) => state.common?.loading);
-    console.log("pricesData", pricesData);
+    // console.log("pricesData", pricesData);
 
     const calculateProfitLoss = (avgPrice, currentPrice, quantity) => {
         const profitLoss = (currentPrice - avgPrice) * quantity;
