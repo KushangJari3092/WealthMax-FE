@@ -20,6 +20,8 @@ import Reports from "../components/reports";
 export default function Routes() {
   const ProtectedRoute = ({ children }) => {
     const token = Cookies.get("token");
+    console.log("token",token);
+    
     return token ? children : <Navigate to="/login" replace />;
   };
   const PublicRoute = ({ children }) => {
