@@ -51,7 +51,7 @@ export default function Header(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const token = Cookies.get("token");
+  const token = useSelector((state) => state.auth?.token);
 
   const handleOpen = () => setOpen(true);
   const user = useSelector((state) => state?.auth?.user);
