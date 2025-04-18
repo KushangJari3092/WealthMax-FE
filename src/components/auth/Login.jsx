@@ -55,6 +55,7 @@ export default function Login() {
 
       if (res?.data?.loggedin) {
         setTimeout(() => {
+          console.log("res?.data",res?.data);
           navigate("/dashboard"); // Navigate to dashboard after login
           toast.success(res?.data?.message); // Show success toast
           handleClose(); // Close any modal or overlay if open
