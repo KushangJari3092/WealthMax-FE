@@ -21,6 +21,9 @@ import { useSelector } from "react-redux";
 export default function Routes() {
   const token = useSelector((state) => state.auth?.token);
   const token2 = Cookies.get('token');
+  console.log("token2",token2);
+  console.log("token",token);
+  
   const ProtectedRoute = ({ children }) => {
     
     return token || token2 ? children : <Navigate to="/login" replace />;
