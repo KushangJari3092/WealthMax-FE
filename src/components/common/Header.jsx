@@ -99,7 +99,7 @@ export default function Header(props) {
                 />
               </Box>
               <Box className="nav-right">
-                {location.pathname === "/" && !token && !token2 && (
+                {location.pathname === "/" && (!token || !token2) && (
                   <Box sx={{ ml: "auto" }}>
                     <Button
                       className="common-button-blue"
@@ -109,7 +109,7 @@ export default function Header(props) {
                     </Button>
                   </Box>
                 )}
-                {token && token2 && (
+                {(token || token2) && (
                   <>
                     {/* <Box sx={{ ml: "auto" }}> */}
                     {/* <Box sx={{ display: { xs: "none", sm: "block" } }}> */}
