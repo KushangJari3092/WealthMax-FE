@@ -31,6 +31,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../store/slices/userSlice";
+import { logout } from "../../store/slices/auth/authSlice";
 // import LoginModal from "../auth/Login";
 
 function HideOnScroll(props) {
@@ -48,16 +49,18 @@ function HideOnScroll(props) {
 
 export default function Header(props) {
   const [open, setOpen] = useState(false);
+  const [token2, settoken2] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const token = useSelector((state) => state.auth?.token);
-
   const handleOpen = () => setOpen(true);
-  const user = useSelector((state) => state?.auth?.user);
-  // console.log("user", user);
+  const user = useSelector((state) => state?.user?.user);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  useEffect(() => {
+    settoken2(Cookies.get('token'))
+  }, [])
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -65,24 +68,24 @@ export default function Header(props) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("user");
-    navigate("/");
+  const handleLogout = async () => {
+    await dispatch(logout())
     toast.success("Logged Out");
     handleCloseUserMenu();
+    navigate("/");
   };
 
-  // useEffect(() => {
-  //   dispatch(getUser());
-  // }, []);
+  useEffect(() => {
+    if (token || token2)
+      dispatch(getUser());
+  }, [dispatch, token, token2]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
 
   return (
     <>
-      <Box sx={{position:'sticky', top:0, zIndex:10}}>
+      <Box sx={{ position: 'sticky', top: 0, zIndex: 10 }}>
         <HideOnScroll {...props}>
           <Box className="navbar">
             <Toolbar className="nav-section">
@@ -96,7 +99,7 @@ export default function Header(props) {
                 />
               </Box>
               <Box className="nav-right">
-                {location.pathname === "/" && !token && (
+                {location.pathname === "/" && !token && !token2 && (
                   <Box sx={{ ml: "auto" }}>
                     <Button
                       className="common-button-blue"
@@ -106,7 +109,7 @@ export default function Header(props) {
                     </Button>
                   </Box>
                 )}
-                {token && (
+                {token || token2 && (
                   <>
                     {/* <Box sx={{ ml: "auto" }}> */}
                     {/* <Box sx={{ display: { xs: "none", sm: "block" } }}> */}
@@ -183,11 +186,11 @@ export default function Header(props) {
 
                           {/* Menu Options */}
                           <MenuItem onClick={() => {
-                              handleCloseUserMenu();
-                              navigate("/orders", {
-                                state: { user: user },
-                              });
-                            }}>
+                            handleCloseUserMenu();
+                            navigate("/orders", {
+                              state: { user: user },
+                            });
+                          }}>
                             <ListItemIcon>
                               <ShoppingBag fontSize="small" />
                             </ListItemIcon>
@@ -219,12 +222,12 @@ export default function Header(props) {
                             </ListItemIcon>
                             <Typography>My Capital</Typography>
                           </MenuItem>
-                          <MenuItem  onClick={() => {
-                              handleCloseUserMenu();
-                              navigate("/reports", {
-                                state: { user: user },
-                              });
-                            }}>
+                          <MenuItem onClick={() => {
+                            handleCloseUserMenu();
+                            navigate("/reports", {
+                              state: { user: user },
+                            });
+                          }}>
                             <ListItemIcon>
                               <Article fontSize="small" />
                             </ListItemIcon>

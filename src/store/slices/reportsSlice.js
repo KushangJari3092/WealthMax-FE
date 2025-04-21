@@ -80,3 +80,22 @@ export const getOrdersReports = (filters) => async (dispatch) => {
     dispatch(setLoading(false)); // Reset loading state
   }
 };
+
+export const sendEmail = (payload) => async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/reports/send-email`,
+        payload,
+        { withCredentials: true }
+      );
+      
+      return response?.data;
+    } catch (error) {
+      console.log("error", error);
+      return {
+        success: false,
+        error: error.response?.data.message,
+        user: error.response.data.user || null,
+      };
+    }
+  };

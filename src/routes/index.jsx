@@ -20,13 +20,14 @@ import Reports from "../components/reports";
 import { useSelector } from "react-redux";
 export default function Routes() {
   const token = useSelector((state) => state.auth?.token);
+  const token2 = Cookies.get('token');
   const ProtectedRoute = ({ children }) => {
-    console.log("token",token);
     
-    return token ? children : <Navigate to="/login" replace />;
+    return token || token2 ? children : <Navigate to="/login" replace />;
   };
   const PublicRoute = ({ children }) => {
-    return token ? <Navigate to="/" replace /> : children;
+
+    return token || token2 ? <Navigate to="/" replace /> : children;
   };
   return (
     <ReactRoutes>

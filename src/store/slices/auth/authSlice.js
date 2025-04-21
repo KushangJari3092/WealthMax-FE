@@ -18,7 +18,7 @@ try {
 
 const initialState = {
   user: null,
-  token:'',
+  token: '',
 };
 
 const authSlice = createSlice({
@@ -29,14 +29,12 @@ const authSlice = createSlice({
       state.user = action.payload.user;
     },
     setToken: (state, action) => {
-      console.log("action",action);
-      
       state.token = action.payload;
     },
   },
 });
 
-export const { loginSuccess,setToken } = authSlice.actions;
+export const { loginSuccess, setToken } = authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -61,6 +59,20 @@ export const login = (payload) => async (dispatch) => {
       success: false,
       error: error.response?.data.message,
       user: error.response.data.user || null,
+    };
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    Cookies.remove("token");
+    Cookies.remove("user");
+    dispatch(setToken(''))
+    return { success: true, data: { message: 'logged out' } };
+  } catch (error) {
+    // console.log('error', error)
+    return {
+      success: false,
     };
   }
 };
