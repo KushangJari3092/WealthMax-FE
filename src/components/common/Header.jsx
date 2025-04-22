@@ -57,6 +57,8 @@ export default function Header(props) {
   const handleOpen = () => setOpen(true);
   const user = useSelector((state) => state?.user?.user);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+console.log("token",token);
+console.log("token2",token2);
 
   useEffect(() => {
     settoken2(Cookies.get('token'))
@@ -99,7 +101,7 @@ export default function Header(props) {
                 />
               </Box>
               <Box className="nav-right">
-                {location.pathname === "/" && (!token || !token2) && (
+                {location.pathname === "/" && (!token && !token2) && (
                   <Box sx={{ ml: "auto" }}>
                     <Button
                       className="common-button-blue"

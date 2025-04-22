@@ -72,8 +72,8 @@ const customStyles1 = {
     backgroundColor: state.isSelected
       ? "#ffca61" // Highlight selected item with color
       : state.isFocused
-      ? "#fafafa" // Hover effect
-      : "white",
+        ? "#fafafa" // Hover effect
+        : "white",
     color: "black",
     "&:active": {
       backgroundColor: "rgba(25, 118, 210, 0.08)",
@@ -105,8 +105,8 @@ const customStyles2 = {
     backgroundColor: state.isSelected
       ? "#ffca61" // Highlight selected item with color
       : state.isFocused
-      ? "#fafafa" // Hover effect
-      : "white",
+        ? "#fafafa" // Hover effect
+        : "white",
     color: "black",
     "&:active": {
       backgroundColor: "rgba(25, 118, 210, 0.08)",
@@ -252,469 +252,495 @@ const BankAccountDetails = () => {
     dispatch(getBankDetails());
   };
 
-  if (loading || !banks) {
-    return (
-      <div className="loader">
-        <div className="spinner"></div>
-        <p>Loading Bank data...</p>
-      </div>
-    );
-  }
+  
 
   return (
-    <Box className="bank-detail-container">
-      <Typography
-        sx={{ fontSize: "25px", fontWeight: 500, marginBottom: "25px" }}
-      >
-        Bank Account Details
-      </Typography>
-      <Grid container spacing={4}>
-        {/* Left Side - Bank Account List */}
-        <Grid item xs={12} md={6}>
-          <Box className="bank-right">
-            {bankDetails?.allBanks?.map((bank) => (
-              <Box key={bank?.bankName} className="bank-name">
-                <Box display="flex" alignItems="center" gap={2}>
-                  {banks?.find((b) => b.bankName === bank?.bankName)?.logo !==
-                  undefined ? (
-                    <img
-                      alt="bank"
-                      src={getImageSrc(
-                        banks?.find((b) => b.bankName === bank?.bankName)?.logo
-                      )}
-                      width={35}
-                      height={35}
-                    />
-                  ) : (
-                    <img alt="bank" src={bankImage} width={35} height={35} />
-                  )}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Box sx={{ ml: 1 }}>
-                      <Typography sx={{ fontWeight: 500 }}>
-                        {bank?.bankName}
-                      </Typography>
-                      <Typography variant="body2">
-                        {bank?.accountNum.slice(0, -4).replace(/\d/g, "X") +
-                          bank?.accountNum.slice(-4)}
-                      </Typography>
+    <>
+
+      <Box className="bank-detail-container">
+        {
+        (loading || !banks)
+        // true
+        &&
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 9999,
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '4px solid rgba(0, 0, 0, 0.1)',
+              borderTop: '5px solid #fdc148',
+              borderBottom: '5px solid #014188',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }} />
+            <style>
+              {`
+              @keyframes spin {
+                to { transform: rotate(360deg); }
+              }
+            `}
+            </style>
+          </div>
+        }
+
+        <Typography
+          sx={{ fontSize: "25px", fontWeight: 500, marginBottom: "25px" }}
+        >
+          Bank Account Details
+        </Typography>
+        <Grid container spacing={4}>
+          {/* Left Side - Bank Account List */}
+          <Grid item xs={12} md={6}>
+            <Box className="bank-right">
+              {bankDetails?.allBanks?.map((bank) => (
+                <Box key={bank?.bankName} className="bank-name">
+                  <Box display="flex" alignItems="center" gap={2}>
+                    {banks?.find((b) => b.bankName === bank?.bankName)?.logo !==
+                      undefined ? (
+                      <img
+                        alt="bank"
+                        src={getImageSrc(
+                          banks?.find((b) => b.bankName === bank?.bankName)?.logo
+                        )}
+                        width={35}
+                        height={35}
+                      />
+                    ) : (
+                      <img alt="bank" src={bankImage} width={35} height={35} />
+                    )}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      <Box sx={{ ml: 1 }}>
+                        <Typography sx={{ fontWeight: 500 }}>
+                          {bank?.bankName}
+                        </Typography>
+                        <Typography variant="body2">
+                          {bank?.accountNum.slice(0, -4).replace(/\d/g, "X") +
+                            bank?.accountNum.slice(-4)}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                  {bank?.bankName !== user?.bankName ? (
-                    <Box>
-                      <IconButton onClick={(e) => handleMenuOpen(e, bank)}>
-                        <MoreVertIcon sx={{ fontSize: "19px" }} />
-                      </IconButton>
-                      <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
-                        PaperProps={{
-                          elevation: 1,
-                          sx: { width: 150 }, // Adjust menu width
-                        }}
-                      >
-                        <MenuItem
-                          onClick={async () => {
-                            await dispatch(
-                              updateUser({
-                                bankName: selectedBank?.bankName,
-                                ifsc: selectedBank?.ifsc,
-                                accountNum: selectedBank?.accountNum,
-                                action: "change_primary",
-                              })
-                            );
-                            await dispatch(getBankDetails());
-                            dispatch(getUser());
-                            handleMenuClose();
+                    {bank?.bankName !== user?.bankName ? (
+                      <Box>
+                        <IconButton onClick={(e) => handleMenuOpen(e, bank)}>
+                          <MoreVertIcon sx={{ fontSize: "19px" }} />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
+                          PaperProps={{
+                            elevation: 1,
+                            sx: { width: 150 }, // Adjust menu width
                           }}
-                          sx={{ p: 0, paddingLeft: 2 }}
                         >
-                          Make Primary
-                        </MenuItem>
-                        <Divider sx={{ m: 0 }} />
-                        <MenuItem
-                          onClick={async () => {
-                            if (selectedBank?.bankName === user?.bankName) {
-                              toast.error("Primary bank cannot be deleted");
-                            } else {
+                          <MenuItem
+                            onClick={async () => {
                               await dispatch(
                                 updateUser({
                                   bankName: selectedBank?.bankName,
                                   ifsc: selectedBank?.ifsc,
                                   accountNum: selectedBank?.accountNum,
-                                  action: "delete",
+                                  action: "change_primary",
                                 })
                               );
-                              dispatch(getBankDetails());
-                            }
-                            handleMenuClose();
-                          }}
-                          sx={{ color: "red", p: 0, paddingLeft: 2 }}
-                        >
-                          Delete
-                        </MenuItem>
-                      </Menu>
-                    </Box>
-                  ) : (
-                    <Box>
-                      <Tooltip
-                        title="primary bank"
-                        arrow
-                        componentsProps={{
-                          tooltip: {
-                            sx: {
-                              fontSize: "14px", // Adjust the font size here
-                              color: "white", // Optional: Change text color
-                              padding: "5px", // Optional: Increase padding
+                              await dispatch(getBankDetails());
+                              dispatch(getUser());
+                              handleMenuClose();
+                            }}
+                            sx={{ p: 0, paddingLeft: 2 }}
+                          >
+                            Make Primary
+                          </MenuItem>
+                          <Divider sx={{ m: 0 }} />
+                          <MenuItem
+                            onClick={async () => {
+                              if (selectedBank?.bankName === user?.bankName) {
+                                toast.error("Primary bank cannot be deleted");
+                              } else {
+                                await dispatch(
+                                  updateUser({
+                                    bankName: selectedBank?.bankName,
+                                    ifsc: selectedBank?.ifsc,
+                                    accountNum: selectedBank?.accountNum,
+                                    action: "delete",
+                                  })
+                                );
+                                dispatch(getBankDetails());
+                              }
+                              handleMenuClose();
+                            }}
+                            sx={{ color: "red", p: 0, paddingLeft: 2 }}
+                          >
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </Box>
+                    ) : (
+                      <Box>
+                        <Tooltip
+                          title="primary bank"
+                          arrow
+                          componentsProps={{
+                            tooltip: {
+                              sx: {
+                                fontSize: "14px", // Adjust the font size here
+                                color: "white", // Optional: Change text color
+                                padding: "5px", // Optional: Increase padding
+                              },
                             },
-                          },
-                        }}
-                      >
-                        <IconButton>
-                          <VerifiedIcon
-                            color="success"
-                            sx={{ fontSize: "17px" }}
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  )}
+                          }}
+                        >
+                          <IconButton>
+                            <VerifiedIcon
+                              color="success"
+                              sx={{ fontSize: "17px" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
 
-            <Box
-              padding={1.5}
-              marginLeft={1}
-              display="flex"
-              alignItems="center"
-              gap={1}
-            >
-              {/* Add another bank */}
-              <RiAddCircleLine fill="#008059d4" />
-              <Typography
-                sx={{ fontWeight: 500, color: "#008059d4", cursor: "pointer" }}
-                onClick={() => {
-                  setisAdd(true);
-                  setNewBank(false);
-                }}
+              <Box
+                padding={1.5}
+                marginLeft={1}
+                display="flex"
+                alignItems="center"
+                gap={1}
               >
-                Add another bank
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-
-        {/* Right Side - Bank Account Details */}
-        <Grid item xs={12} md={6}>
-          {!isAdd && !newBranch && (
-            <Card sx={{ padding: 2 }}>
-              <Box display="flex" gap={3} alignItems="center" mb={2}>
-                {banks?.find((b) => b.bankName === bankDetails?.bankName)
-                  ?.logo ? (
-                  <img
-                    alt="bank"
-                    src={getImageSrc(
-                      banks?.find((b) => b.bankName === bankDetails?.bankName)
-                        ?.logo
-                    )} // Replace with actual bank logo URL
-                    width={35}
-                    height={35}
-                  />
-                ) : (
-                  <img
-                    alt="bank"
-                    src={bankImage} // Replace with actual bank logo URL
-                    width={35}
-                    height={35}
-                  />
-                )}
-                <Box>
-                  <Typography sx={{ fontWeight: 500 }}>
-                    {bankDetails?.bankName}
-                  </Typography>
-                  <Typography color="grey" fontWeight="bold">
-                    Primary bank
-                  </Typography>
-                </Box>
+                {/* Add another bank */}
+                <RiAddCircleLine fill="#008059d4" />
+                <Typography
+                  sx={{ fontWeight: 500, color: "#008059d4", cursor: "pointer" }}
+                  onClick={() => {
+                    setisAdd(true);
+                    setNewBank(false);
+                  }}
+                >
+                  Add another bank
+                </Typography>
               </Box>
-              <CardContent>
-                <Box display="flex" alignItems="center" gap={15}>
-                  <Typography width={80}>Status</Typography>
-                  <Typography color="textSecondary">Verified</Typography>
+            </Box>
+          </Grid>
+
+          {/* Right Side - Bank Account Details */}
+          <Grid item xs={12} md={6}>
+            {!isAdd && !newBranch && (
+              <Card sx={{ padding: 2 }}>
+                <Box display="flex" gap={3} alignItems="center" mb={2}>
+                  {banks?.find((b) => b.bankName === bankDetails?.bankName)
+                    ?.logo ? (
+                    <img
+                      alt="bank"
+                      src={getImageSrc(
+                        banks?.find((b) => b.bankName === bankDetails?.bankName)
+                          ?.logo
+                      )} // Replace with actual bank logo URL
+                      width={35}
+                      height={35}
+                    />
+                  ) : (
+                    <img
+                      alt="bank"
+                      src={bankImage} // Replace with actual bank logo URL
+                      width={35}
+                      height={35}
+                    />
+                  )}
+                  <Box>
+                    <Typography sx={{ fontWeight: 500 }}>
+                      {bankDetails?.bankName}
+                    </Typography>
+                    <Typography color="grey" fontWeight="bold">
+                      Primary bank
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box mt={2} display="flex" alignItems="center" gap={15}>
-                  <Typography width={80}>Account</Typography>
-                  <Typography color="textSecondary">
-                    {bankDetails?.accountNum.slice(0, -4).replace(/\d/g, "X") +
-                      bankDetails?.accountNum.slice(-4)}
-                  </Typography>
-                </Box>
-                <Box mt={2} display="flex" alignItems="center" gap={15}>
-                  <Typography width={80}>IFSC Code</Typography>
-                  <Typography color="textSecondary">
-                    {bankDetails?.ifsc}
-                  </Typography>
-                </Box>
-                <Box mt={2} display="flex" alignItems="center" gap={15}>
-                  <Typography width={90}>Branch</Typography>
-                  <Typography color="textSecondary" marginLeft={-1}>
-                    {loadingBranch
-                      ? "Fetching branch..."
-                      : branchesofBank?.find(
+                <CardContent>
+                  <Box display="flex" alignItems="center" gap={15}>
+                    <Typography width={80}>Status</Typography>
+                    <Typography color="textSecondary">Verified</Typography>
+                  </Box>
+                  <Box mt={2} display="flex" alignItems="center" gap={15}>
+                    <Typography width={80}>Account</Typography>
+                    <Typography color="textSecondary">
+                      {bankDetails?.accountNum.slice(0, -4).replace(/\d/g, "X") +
+                        bankDetails?.accountNum.slice(-4)}
+                    </Typography>
+                  </Box>
+                  <Box mt={2} display="flex" alignItems="center" gap={15}>
+                    <Typography width={80}>IFSC Code</Typography>
+                    <Typography color="textSecondary">
+                      {bankDetails?.ifsc}
+                    </Typography>
+                  </Box>
+                  <Box mt={2} display="flex" alignItems="center" gap={15}>
+                    <Typography width={90}>Branch</Typography>
+                    <Typography color="textSecondary" marginLeft={-1}>
+                      {loadingBranch
+                        ? "Fetching branch..."
+                        : branchesofBank?.find(
                           (b) => b.ifsc === bankDetails?.ifsc
                         )?.branchName +
                         " - " +
                         branchesofBank?.find(
                           (b) => b.ifsc === bankDetails?.ifsc
                         )?.city}
-                  </Typography>
-                </Box>
-              </CardContent>
-              <Divider />
-              
-              <Box
-                elevation={1}
-                sx={{ padding: 2, mt: 3, backgroundColor: "#e6f7e6" }}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography variant="body2">
-                  Have questions about Bank & Autopay?
-                </Typography>
-                <Button startIcon={<HelpIcon />} size="small">
-                  Get help
-                </Button>
-              </Box>
-            </Card>
-          )}
-          {isAdd && !newBranch && (
-            <Card className="add-bank-card" sx={{ height: "350px" }}>
-              <Box display="flex" justifyContent="space-between">
-                <Typography sx={{ fontWeight: 500, fontSize: "20px" }}>
-                  Choose bank
-                </Typography>
-                <Box sx={{ cursor: "pointer" }} onClick={() => setisAdd(false)}>
-                  <RxCross2 />
-                </Box>
-              </Box>
-              <Typography
-                sx={{ fontWeight: 500, fontSize: "15px", color: "grey" }}
-              >
-                Bank is compulsory for opening an investment account
-              </Typography>
-              {!newBank && (
-                <Select
-                  styles={customStyles1}
-                  // className="basic-single"
-                  isClearable
-                  isSearchable
-                  placeholder="Search bank"
-                  options={bankOptions}
-                  menuIsOpen={true}
-                  defaultMenuIsOpen
-                  onChange={handleBankChange}
-                  components={{
-                    DropdownIndicator: () => null, // Remove the default dropdown arrow
-                    IndicatorSeparator: () => null, // Remove the separator line next to the arrow
-                  }}
-                />
-              )}
-              {newBank && (
-                <Box sx={{ pb: 3 }}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    gap={2}
-                    sx={{ mt: 3 }}
-                  >
-                    {bankById?.logo ? (
-                      <img
-                        alt="bank"
-                        src={getImageSrc(bankById?.logo)} // Replace with actual bank logo URL
-                        width={35}
-                        height={35}
-                      />
-                    ) : (
-                      <img
-                        alt="bank"
-                        src={bankImage} // Replace with actual bank logo URL
-                        width={35}
-                        height={35}
-                      />
-                    )}
-                    <Box>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                        {newBank?.label}
-                      </Typography>
-                    </Box>
+                    </Typography>
                   </Box>
-                  <Select
-                    styles={customStyles2}
-                    // className="basic-single"
-                    isClearable
-                    isSearchable
-                    menuIsOpen={true}
-                    defaultMenuIsOpen
-                    placeholder="IFSC Code"
-                    options={branchOptions}
-                    onInputChange={handleInputChange}
-                    noOptionsMessage={() => "Search your branch/IFSC/City"}
-                    components={{
-                      DropdownIndicator: () => null, // Remove the default dropdown arrow
-                      IndicatorSeparator: () => null, // Remove the separator line next to the arrow
-                      // ValueContainer, // Custom ValueContainer to show the adornment
-                    }}
-                    onChange={(selectedOption) => {
-                      // console.log("selectedOption", selectedOption);
-                      setNewBranch(selectedOption);
-                    }}
-                  />
-                </Box>
-              )}
-            </Card>
-          )}
+                </CardContent>
+                <Divider />
 
-          {newBranch && (
-            <Card sx={{ p: 2 }}>
-              <Box
-                sx={{
-                  // p: 2,
-                  borderRadius: 2,
-
-                  backgroundColor: "white",
-                }}
-                // className="add-bank-card"
-              >
-                <Box display="flex" justifyContent="space-between">
-                  <Typography sx={{ fontSize: "22px" }}>
-                    Verify your bank account
+                <Box
+                  elevation={1}
+                  sx={{ padding: 2, mt: 3, backgroundColor: "#e6f7e6" }}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography variant="body2">
+                    Have questions about Bank & Autopay?
                   </Typography>
-                  <Box
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setNewBranch("");
-                      setisAdd(false);
-                    }}
-                  >
+                  <Button startIcon={<HelpIcon />} size="small">
+                    Get help
+                  </Button>
+                </Box>
+              </Card>
+            )}
+            {isAdd && !newBranch && (
+              <Card className="add-bank-card" sx={{ height: "350px" }}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography sx={{ fontWeight: 500, fontSize: "20px" }}>
+                    Choose bank
+                  </Typography>
+                  <Box sx={{ cursor: "pointer" }} onClick={() => setisAdd(false)}>
                     <RxCross2 />
                   </Box>
                 </Box>
                 <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  sx={{ mt: 1, mb: 2 }}
+                  sx={{ fontWeight: 500, fontSize: "15px", color: "grey" }}
                 >
-                  Investments on Groww can be done using only savings bank
-                  accounts
+                  Bank is compulsory for opening an investment account
                 </Typography>
-
-                <Card variant="outlined" sx={{ mb: 2 }}>
-                  <CardContent>
+                {!newBank && (
+                  <Select
+                    styles={customStyles1}
+                    // className="basic-single"
+                    isClearable
+                    isSearchable
+                    placeholder="Search bank"
+                    options={bankOptions}
+                    menuIsOpen={true}
+                    defaultMenuIsOpen
+                    onChange={handleBankChange}
+                    components={{
+                      DropdownIndicator: () => null, // Remove the default dropdown arrow
+                      IndicatorSeparator: () => null, // Remove the separator line next to the arrow
+                    }}
+                  />
+                )}
+                {newBank && (
+                  <Box sx={{ pb: 3 }}>
                     <Box
                       display="flex"
                       alignItems="center"
-                      justifyContent="space-between"
+                      gap={2}
+                      sx={{ mt: 3 }}
                     >
-                      <Box display="flex" alignItems="center">
-                        {bankById?.logo ? (
-                          <img
-                            alt="bank"
-                            src={getImageSrc(bankById?.logo)} // Replace with actual bank logo URL
-                            width={35}
-                            height={35}
-                          />
-                        ) : (
-                          <img
-                            alt="bank"
-                            src={bankImage} // Replace with actual bank logo URL
-                            width={35}
-                            height={35}
-                          />
-                        )}
-                        <Typography sx={{ ml: 2, fontSize: "18px" }}>
+                      {bankById?.logo ? (
+                        <img
+                          alt="bank"
+                          src={getImageSrc(bankById?.logo)} // Replace with actual bank logo URL
+                          width={35}
+                          height={35}
+                        />
+                      ) : (
+                        <img
+                          alt="bank"
+                          src={bankImage} // Replace with actual bank logo URL
+                          width={35}
+                          height={35}
+                        />
+                      )}
+                      <Box>
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
                           {newBank?.label}
                         </Typography>
                       </Box>
                     </Box>
-                    <Typography
-                      sx={{
-                        mt: 5,
-                        fontSize: "15px",
-                        display: "flex",
-                        gap: "20px",
+                    <Select
+                      styles={customStyles2}
+                      // className="basic-single"
+                      isClearable
+                      isSearchable
+                      menuIsOpen={true}
+                      defaultMenuIsOpen
+                      placeholder="IFSC Code"
+                      options={branchOptions}
+                      onInputChange={handleInputChange}
+                      noOptionsMessage={() => "Search your branch/IFSC/City"}
+                      components={{
+                        DropdownIndicator: () => null, // Remove the default dropdown arrow
+                        IndicatorSeparator: () => null, // Remove the separator line next to the arrow
+                        // ValueContainer, // Custom ValueContainer to show the adornment
                       }}
-                    >
-                      <span style={{ color: "grey" }}>Branch Name:</span>
-                      <span>
-                        {newBranch?.label?.replace(/\s*\([^)]*\)$/, "")}
-                      </span>
-                    </Typography>
-                    <Typography
-                      sx={{
-                        mt: 2,
-                        fontSize: "15px",
-                        display: "flex",
-                        gap: "20px",
+                      onChange={(selectedOption) => {
+                        // console.log("selectedOption", selectedOption);
+                        setNewBranch(selectedOption);
                       }}
-                    >
-                      <span style={{ color: "grey" }}>IFSC Code:</span>
-                      <span>{newBranch?.label?.match(/\(([^)]+)\)/)[1]}</span>
-                    </Typography>
-                  </CardContent>
-                </Card>
+                    />
+                  </Box>
+                )}
+              </Card>
+            )}
 
-                <Typography sx={{ mb: 1 }}>
-                  <span style={{ color: "grey" }}>Enter bank account of</span>{" "}
-                  {user?.name}
-                </Typography>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  placeholder="Eg: 123456789101"
-                  onChange={(e) => setAccountNumber(e.target.value)}
-                  type={showAccountNumber ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() =>
-                            setShowAccountNumber(!showAccountNumber)
-                          }
-                        >
-                          {showAccountNumber ? (
-                            <VisibilityOffIcon />
-                          ) : (
-                            <VisibilityIcon />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+            {newBranch && (
+              <Card sx={{ p: 2 }}>
+                <Box
+                  sx={{
+                    // p: 2,
+                    borderRadius: 2,
+
+                    backgroundColor: "white",
                   }}
-                />
-
-                <Button
-                  variant="contained"
-                  fullWidth
-                  disabled={accountNumber?.length < 10}
-                  sx={{ mt: 2, backgroundColor: "#008360" }}
-                  onClick={handleAddNewBank}
+                // className="add-bank-card"
                 >
-                  VERIFY BANK
-                </Button>
-              </Box>
-            </Card>
-          )}
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography sx={{ fontSize: "22px" }}>
+                      Verify your bank account
+                    </Typography>
+                    <Box
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setNewBranch("");
+                        setisAdd(false);
+                      }}
+                    >
+                      <RxCross2 />
+                    </Box>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ mt: 1, mb: 2 }}
+                  >
+                    Investments on Groww can be done using only savings bank
+                    accounts
+                  </Typography>
+
+                  <Card variant="outlined" sx={{ mb: 2 }}>
+                    <CardContent>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Box display="flex" alignItems="center">
+                          {bankById?.logo ? (
+                            <img
+                              alt="bank"
+                              src={getImageSrc(bankById?.logo)} // Replace with actual bank logo URL
+                              width={35}
+                              height={35}
+                            />
+                          ) : (
+                            <img
+                              alt="bank"
+                              src={bankImage} // Replace with actual bank logo URL
+                              width={35}
+                              height={35}
+                            />
+                          )}
+                          <Typography sx={{ ml: 2, fontSize: "18px" }}>
+                            {newBank?.label}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Typography
+                        sx={{
+                          mt: 5,
+                          fontSize: "15px",
+                          display: "flex",
+                          gap: "20px",
+                        }}
+                      >
+                        <span style={{ color: "grey" }}>Branch Name:</span>
+                        <span>
+                          {newBranch?.label?.replace(/\s*\([^)]*\)$/, "")}
+                        </span>
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mt: 2,
+                          fontSize: "15px",
+                          display: "flex",
+                          gap: "20px",
+                        }}
+                      >
+                        <span style={{ color: "grey" }}>IFSC Code:</span>
+                        <span>{newBranch?.label?.match(/\(([^)]+)\)/)[1]}</span>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+
+                  <Typography sx={{ mb: 1 }}>
+                    <span style={{ color: "grey" }}>Enter bank account of</span>{" "}
+                    {user?.name}
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Eg: 123456789101"
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    type={showAccountNumber ? "text" : "password"}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() =>
+                              setShowAccountNumber(!showAccountNumber)
+                            }
+                          >
+                            {showAccountNumber ? (
+                              <VisibilityOffIcon />
+                            ) : (
+                              <VisibilityIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    disabled={accountNumber?.length < 10}
+                    sx={{ mt: 2, backgroundColor: "#008360" }}
+                    onClick={handleAddNewBank}
+                  >
+                    VERIFY BANK
+                  </Button>
+                </Box>
+              </Card>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 };
 

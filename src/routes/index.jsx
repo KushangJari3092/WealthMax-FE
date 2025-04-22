@@ -30,7 +30,7 @@ export default function Routes() {
   };
   const PublicRoute = ({ children }) => {
 
-    return token || token2 ? <Navigate to="/" replace /> : children;
+    return token || token2!==undefined ? <Navigate to="/" replace /> : children;
   };
   return (
     <ReactRoutes>
